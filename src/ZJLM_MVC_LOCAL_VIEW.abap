@@ -56,11 +56,6 @@ CLASS lcl_view DEFINITION.
         i_field   TYPE lvc_fname OPTIONAL
       CHANGING
         ch_fieldcat TYPE lvc_t_fcat .
-    METHODS m_ajuste_semaforo
-      IMPORTING
-        i_status TYPE char1
-      RETURNING
-        value(r_semaforo) TYPE char10 .
 
 ENDCLASS.                    "lcl_model DEFINITION
 
@@ -232,26 +227,7 @@ CLASS lcl_view IMPLEMENTATION.
       SORT r_return BY fieldname.
     ENDIF.
 
-*    LOOP AT w_model-it_relatorio ASSIGNING <fsl_relatorio>.
-*      <fsl_relatorio>-semaforo = m_ajuste_semaforo( <fsl_relatorio>-status ).
-*    ENDLOOP.
-
     m_formata_campos( EXPORTING i_campo = 'CONNID'     i_nome = 'Companhia' i_visivel = ' ' i_ordem = 1  CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'CLIENTE'      i_visivel = ' ' i_ordem = 2  CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'FATURA'       i_nome = 'Fatura'(004) i_visivel = ' ' i_ordem = 3  CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'LC'           i_visivel = ' ' i_ordem = 4  CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'NOTA_FISCAL'  i_visivel = ' ' i_ordem = 5  CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'NOSSO_NUM'    i_visivel = ' ' i_ordem = 6  CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'PARCELA'      i_visivel = ' ' i_ordem = 7  CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'DATA'         i_visivel = ' ' i_ordem = 8  CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'HORA'         i_visivel = ' ' i_ordem = 9  CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'VALOR'        i_nome = 'Valor'(003) i_visivel = ' ' i_ordem = 10 CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'VALOR_PG'     i_nome = 'Pago'(005) i_visivel = ' ' i_ordem = 11 CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'STATUS'       i_visivel = 'X' i_ordem = 12 CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'MENSAGEM'     i_nome = 'Segunda Via'(002) i_visivel = ' ' i_ordem = 13 CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'MSG_ID'       i_visivel = 'X' i_ordem = 14 CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'ETAPA'        i_visivel = 'X' i_ordem = 15 CHANGING ch_fieldcat = r_return ).
-*    m_formata_campos( EXPORTING i_campo = 'ID_TRANSACAO' i_visivel = 'X' i_ordem = 16 CHANGING ch_fieldcat = r_return ).
 
   ENDMETHOD.                    "m_set_fieldcat_header
 
@@ -265,9 +241,7 @@ CLASS lcl_view IMPLEMENTATION.
       IF i_campo EQ 'CONNID' AND i_nome IS NOT INITIAL.
         <fsl_fieldcat>-hotspot = 'X'.
       ENDIF.
-      IF i_campo EQ 'NOSSO_NUM' OR i_campo EQ 'FATURA' AND i_nome IS NOT INITIAL.
-        <fsl_fieldcat>-hotspot = 'X'.
-      ENDIF.
+
       <fsl_fieldcat>-reptext   = i_nome.
       <fsl_fieldcat>-scrtext_l = i_nome.
       <fsl_fieldcat>-scrtext_m = i_nome.
@@ -279,20 +253,5 @@ CLASS lcl_view IMPLEMENTATION.
 
 
   ENDMETHOD.                    "m_formata_campos
-
-  METHOD m_ajuste_semaforo.
-
-    CASE i_status.
-      WHEN 'S'. "Sucesso
-        r_semaforo = icon_green_light.
-      WHEN 'B'. "Baixa executada com sucesso
-        r_semaforo = icon_complete.
-      WHEN 'E'. "Erro
-        r_semaforo = icon_red_light.
-      WHEN OTHERS. "
-        r_semaforo = icon_light_out.
-    ENDCASE.
-
-  ENDMETHOD.                    "m_ajuste_semaforo
 
 ENDCLASS.                    "lcl_model IMPLEMENTATION
