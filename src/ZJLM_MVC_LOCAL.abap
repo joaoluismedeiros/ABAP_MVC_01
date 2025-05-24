@@ -25,4 +25,3 @@ START-OF-SELECTION.
   o_control->m_call_screen( ).
 
   INCLUDE zjlm_mvc_local_f01.
-  INCLUDE zjlm_mvc_unit_test.
